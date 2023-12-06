@@ -14,6 +14,13 @@ function App() {
     published: false,
   };
 
+  const tags = [
+    "Travels and adventures",
+    "Health and wellness",
+    "Art and culture",
+    "Food and recipes",
+  ];
+
   const [postsList, setPostsList] = useState([]);
   const [post, setPost] = useState(initialFormData);
   const [editId, setIdPost] = useState("");
@@ -77,6 +84,26 @@ function App() {
     setIdPost(postId);
   }
 
+  function handleTags(value) {
+    /*     let tags = [...post.tags];
+
+    if (tags.includes(value)) {
+      tags = tags.filter((el) => el !== value);
+    } else {
+      tags.push(value);
+    }
+
+    setPost((post) => ({ ...post, tags })); */
+
+    setPost(({ tags, ...post }) => ({
+      ...post,
+      tags: tags.includes(value)
+        ? tags.filter((el) => el !== value)
+        : [...tags, value],
+    }));
+  }
+
+  console.log(post.tags);
   return (
     <>
       <form onSubmit={handleFormSubmit} className="text-center flex flex-col">
@@ -122,14 +149,19 @@ function App() {
             Finance and investments
           </option>
         </select>
+        {tags.map((el) => (
+          <label key={self.crypto.randomUUID()}>
+            {el}
+            <input
+              className="border p-3"
+              value={el}
+              type="checkbox"
+              checked={post.tags.includes(el)}
+              onChange={(e) => handleTags(e.target.value)}
+            />
+          </label>
+        ))}
 
-        <input
-          className="border p-3"
-          value={post.tags}
-          type="text"
-          placeholder="Insert the tags"
-          onChange={(e) => updatePostsList(e.target.value, "tags")}
-        />
         <button
           type="submit"
           className="border p-3 bg-sky-500 text-white rounded-xl hover:bg-sky-800 w-20 m-auto mt-5"
